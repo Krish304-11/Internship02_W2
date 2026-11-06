@@ -1,0 +1,97 @@
+
+// Live Digital Clock
+
+function updateClock() {
+
+    const now = new Date();
+
+    let hours = String(now.getHours()).padStart(2, "0");
+    let minutes = String(now.getMinutes()).padStart(2, "0");
+    let seconds = String(now.getSeconds()).padStart(2, "0");
+
+    document.getElementById("clock").innerText =
+        hours + ":" + minutes + ":" + seconds;
+}
+
+// Update clock every second
+updateClock();
+
+setInterval(updateClock, 1000);
+
+
+// Countdown Timer
+
+let countdownInterval;
+
+function startCountdown() {
+
+    const target = document.getElementById("targetDate").value;
+
+    if (!target) {
+        alert("Please select a date and time!");
+        return;
+    }
+
+    const targetTime = new Date(target).getTime();
+
+    if (targetTime <= Date.now()) {
+        alert("Please select a future date and time!");
+        return;
+    }
+
+    // Stop previous countdown
+    clearInterval(countdownInterval);
+
+    function updateCountdown() {
+
+        const currentTime = new Date().getTime();
+
+        const difference = targetTime - currentTime;
+
+        if (difference <= 0) {
+
+            document.getElementById("countdown").innerText =
+                "Time is up!";
+
+            clearInterval(countdownInterval);
+            return;
+        }
+
+        const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+
+        const hours = Math.floor(
+            (difference / (1000 * 60 * 60)) % 24
+        );
+
+        const minutes = Math.floor(
+            (difference / (1000 * 60)) % 60
+        );
+
+        const seconds = Math.floor(
+            (difference / 1000) % 60
+        );
+
+        document.getElementById("countdown").innerText =
+            days + " Days : " +
+            hours + " Hours : " +
+            minutes + " Minutes : " +
+            seconds + " Seconds";
+    }
+
+    updateCountdown();
+
+    countdownInterval = setInterval(updateCountdown, 1000);
+}
+
+
+// Reset countdown
+
+function resetCountdown() {
+
+    clearInterval(countdownInterval);
+
+    document.getElementById("countdown").innerText =
+        "Countdown will appear here";
+
+    document.getElementById("targetDate").value = "";
+}
